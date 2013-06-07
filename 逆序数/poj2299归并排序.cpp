@@ -18,7 +18,7 @@ void merge(int begin, int mid, int end)
 			tmp[j++] = data[begA++];
 		else
 		{
-			num += (endA - begA + 1);	//因data[B]产生的逆序
+			num += (endA - begA + 1);
 			tmp[j++] = data[begB++];
 		}
 	}
