@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <cstring>
 #include <cstdio>
 #include <algorithm>
@@ -18,7 +18,7 @@ void merge(int begin, int mid, int end)
 			tmp[j++] = data[begA++];
 		else
 		{
-			num += (endA - begA + 1);	//Òòdata[B]²úÉúµÄÄæĞò
+			num += (endA - begA + 1);	//å› data[B]äº§ç”Ÿçš„é€†åº
 			tmp[j++] = data[begB++];
 		}
 	}
