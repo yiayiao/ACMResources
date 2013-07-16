@@ -1,5 +1,4 @@
-﻿//可以作为模版使用
-#include <iostream>
+﻿#include <iostream>
 #include <cstring>
 #include <cstdio>
 #include <algorithm>
@@ -16,10 +15,6 @@ struct Point
 
 int n, cnt, cur_n;
 
-int dplcmp(double x)
-{
-	return fabs(x)<eps?0:(x>eps?1:-1);
-}
 
 Point intersect(Point sp, Point ep, double a, double b, double c)
 {
@@ -29,6 +24,16 @@ Point intersect(Point sp, Point ep, double a, double b, double c)
 	tmp.x = (sp.x*v + ep.x*u) / (u+v);
 	tmp.y = (sp.y*v + ep.y*u) / (u+v);
 	return tmp;
+}
+
+
+int dplcmp(double x)
+{
+	if(fabs(x) < eps)
+		return 0;
+	else if(x > eps)
+		return 1;
+	return -1;
 }
 
 void cut(double a, double b, double c)
@@ -53,49 +58,56 @@ void cut(double a, double b, double c)
 	cnt = cur_n;
 }
 
-double getarea()
+double getdis(Point a, Point b)
 {
-	double ret = 0.0;
-	for(int i=1; i<=cnt; i++)
-	{
-		ret += p[i].x*p[i+1].y - p[i].y*p[i+1].x;
-	}
-	return ret/2.0;
+	return sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
 }
 
-void solve()
+int main()
 {
+	double r;
+	scanf("%d %lf", &n , &r);
 	for(int i=1; i<=n; i++)
+	{
+		scanf("%lf %lf", &points[i].x, &points[i].y);
 		p[i] = points[i];
+	}
+	points[n+1] = points[1];
 	p[0] = p[n], p[n+1] = p[1];
 	cnt = n;
 
 	double a, b, c;
 	for(int i=1; i<=n; i++)
 	{
-		a = points[i].y - points[i+1].y;
-		b = points[i+1].x - points[i].x;
-		c = points[i].x*points[i+1].y - points[i+1].x*points[i].y;
+		Point ta, tb, tt;  
+		tt.x = points[i+1].y - points[i].y;  
+		tt.y = points[i].x - points[i+1].x;  
+		double k = r / sqrt(tt.x * tt.x + tt.y * tt.y);  
+		tt.x = tt.x * k;  
+		tt.y = tt.y * k;  
+		ta.x = points[i].x + tt.x;  
+		ta.y = points[i].y + tt.y;  
+		tb.x = points[i+1].x + tt.x;  
+		tb.y = points[i+1].y + tt.y;  
+
+		a = ta.y - tb.y;
+		b = tb.x - ta.x;
+		c = ta.x*tb.y - tb.x*ta.y;
 		cut(a, b, c);
 	}
-}
 
-int main()
-{
-	int cas;
-	scanf("%d", &cas);
-	while(cas --)
-	{
-		scanf("%d", &n);
-		for(int i=1; i<=n; i++)
-		{
-			scanf("%lf %lf", &points[i].x, &points[i].y);
-		}
-		points[n+1] = points[1];
-		solve();
-		double area = fabs(getarea());
-		printf("%.2lf\n", area);
-	}
+	int ansx = 0,ansy = 0;  
+	double res = 0;  
+	for(int i = 1; i <= cnt; ++i){  
+		for(int j = i + 1; j <= cnt; ++j){  
+			double tmp = getdis(p[i],p[j]);  
+			if(tmp > res){  
+				res = tmp;  
+				ansx = i;  
+				ansy = j;  
+			}  
+		}  
+	}  
+	printf("%.4lf %.4lf %.4lf %.4lf\n",p[ansx].x,p[ansx].y,p[ansy].x,p[ansy].y);  
 	return 0;
 }
-
